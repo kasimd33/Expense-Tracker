@@ -61,7 +61,10 @@ export default function Budgets() {
     let highestPercentage = 0;
 
     currBudgets.forEach(b => {
-      const spent = currExpenses.filter(e => e.category === b.category && e.type === 'expense').reduce((s, e) => s + e.amount, 0);
+      const spent = currExpenses.filter(e => {
+        const expMonth = new Date(e.date).toISOString().slice(0, 7);
+        return e.category === b.category && e.type === 'expense' && expMonth === b.month;
+      }).reduce((s, e) => s + e.amount, 0);
       const pct = (spent / b.limit) * 100;
       if (pct > highestPercentage) {
         highestPercentage = pct;
@@ -114,7 +117,7 @@ export default function Budgets() {
         setBudgets([res.data, ...budgets]);
       }
       setIsModalOpen(false);
-      generateAIInsight(isEditMode ? budgets.map(b => b._id === editId ? payload : b) : [payload, ...budgets], expenses);
+      fetchData();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to save budget.');
     }
@@ -131,9 +134,12 @@ export default function Budgets() {
     }
   };
 
-  const getSpentAmount = (category) => {
+  const getSpentAmount = (category, month) => {
     return expenses
-      .filter(e => e.category === category && e.type === 'expense')
+      .filter(e => {
+        const expMonth = new Date(e.date).toISOString().slice(0, 7);
+        return e.category === category && e.type === 'expense' && expMonth === month;
+      })
       .reduce((sum, e) => sum + e.amount, 0);
   };
 
@@ -186,7 +192,7 @@ export default function Budgets() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {budgets.map((budget, index) => {
-              const spent = getSpentAmount(budget.category);
+              const spent = getSpentAmount(budget.category, budget.month);
               const percentage = Math.min((spent / budget.limit) * 100, 100);
               const isWarning = percentage >= budget.alertThreshold && percentage < 100;
               const isExceeded = percentage >= 100;

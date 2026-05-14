@@ -47,7 +47,7 @@ export default function Analytics() {
           { label: 'Total Income', val: totalIncome, icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
           { label: 'Total Expenses', val: totalExpense, icon: TrendingDown, color: 'text-red-500', bg: 'bg-red-500/10' },
           { label: 'Net Savings', val: savings, icon: DollarSign, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
-          { label: 'Avg Monthly', val: totalExpense / Math.max(1, monthlyData.length), icon: Activity, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+          { label: 'Avg Monthly', val: totalExpense / Math.max(1, monthlyData.filter(m => m.Expense > 0).length), icon: Activity, color: 'text-purple-500', bg: 'bg-purple-500/10' },
         ].map((stat, i) => (
           <div key={i} className="bg-card/80 backdrop-blur-xl border border-border p-6 rounded-3xl shadow-sm">
             <div className="flex items-center gap-4">

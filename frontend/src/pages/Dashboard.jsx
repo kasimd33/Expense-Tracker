@@ -254,8 +254,8 @@ const Dashboard = () => {
           <div className="bg-card/80 backdrop-blur-xl p-6 rounded-3xl border border-border shadow-sm flex flex-col items-center">
              <h3 className="font-bold text-xl w-full mb-8">Expenses by Category</h3>
              {categoryData.length > 0 ? (
-               <div className="w-full flex-1 min-h-[300px]">
-                 <ResponsiveContainer width="100%" height="100%">
+               <div className="w-full" style={{ height: 300 }}>
+                 <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Pie data={categoryData} cx="50%" cy="50%" innerRadius={80} outerRadius={110} paddingAngle={8} dataKey="value" stroke="none">
                         {categoryData.map((entry, index) => (
